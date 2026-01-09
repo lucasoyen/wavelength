@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GameState, createGame } from '@/app/lib/kv';
+import { generateTargetAngle } from '@/app/lib/gameConfig';
 
 function generateGameCode(): string {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -8,10 +9,6 @@ function generateGameCode(): string {
         code += chars[Math.floor(Math.random() * chars.length)];
     }
     return code;
-}
-
-function generateTargetAngle(): number {
-    return Math.random() * 160 - 80; // -80 to 80 degrees
 }
 
 // POST /api/game - Create a new game

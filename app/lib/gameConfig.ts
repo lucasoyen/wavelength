@@ -2,7 +2,16 @@
 
 // Target zone size in degrees - each zone is this many degrees wide
 // Total target width = ZONE_SIZE * 5 (for zones: 2, 3, 4, 3, 2)
-export const ZONE_SIZE = 6;
+export const ZONE_SIZE = 8;
+
+// Generate a random target angle from -90 to +90 degrees (full range)
+export function generateTargetAngle(): number {
+    // Use crypto for better randomness
+    const array = new Uint32Array(1);
+    crypto.getRandomValues(array);
+    const random = array[0] / (0xFFFFFFFF + 1); // 0 to 1 exclusive
+    return random * 180 - 90; // -90 to +90 degrees
+}
 
 // Scoring thresholds based on ZONE_SIZE
 export const SCORE_THRESHOLDS = {
@@ -19,18 +28,21 @@ export function calculateScore(needleAngle: number, targetAngle: number): number
     return 0;
 }
 
-// CSS clip-path percentages for each zone
-// These are calculated based on ZONE_SIZE
-// 50% = center, each degree ≈ 0.556% of arc
-const DEG_TO_PERCENT = 0.556;
+// Convert angle (degrees) to clip-path percentage
+// For a semicircle, a line from bottom center at angle θ hits the top edge at x = 50% + tan(θ) * 50%
+function angleToPercent(degrees: number): number {
+    return Math.tan(degrees * Math.PI / 180) * 50;
+}
 
 export function getZoneClipPaths(zoneSize: number = ZONE_SIZE) {
-    const z = zoneSize * DEG_TO_PERCENT;
+    const z1 = angleToPercent(zoneSize);      // bullseye boundary
+    const z2 = angleToPercent(zoneSize * 2);  // inner boundary
+    const z3 = angleToPercent(zoneSize * 3);  // outer boundary
     return {
-        zone4: `polygon(50% 100%, ${50 - z}% 0%, ${50 + z}% 0%)`,
-        zone3Left: `polygon(50% 100%, ${50 - z * 2}% 0%, ${50 - z}% 0%)`,
-        zone3Right: `polygon(50% 100%, ${50 + z}% 0%, ${50 + z * 2}% 0%)`,
-        zone2Left: `polygon(50% 100%, ${50 - z * 3}% 0%, ${50 - z * 2}% 0%)`,
-        zone2Right: `polygon(50% 100%, ${50 + z * 2}% 0%, ${50 + z * 3}% 0%)`,
+        zone4: `polygon(50% 100%, ${50 - z1}% 0%, ${50 + z1}% 0%)`,
+        zone3Left: `polygon(50% 100%, ${50 - z2}% 0%, ${50 - z1}% 0%)`,
+        zone3Right: `polygon(50% 100%, ${50 + z1}% 0%, ${50 + z2}% 0%)`,
+        zone2Left: `polygon(50% 100%, ${50 - z3}% 0%, ${50 - z2}% 0%)`,
+        zone2Right: `polygon(50% 100%, ${50 + z2}% 0%, ${50 + z3}% 0%)`,
     };
 }

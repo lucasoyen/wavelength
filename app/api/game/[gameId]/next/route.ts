@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getGame, saveGame } from '@/app/lib/kv';
-
-function generateTargetAngle(): number {
-    return Math.random() * 160 - 80;
-}
+import { generateTargetAngle } from '@/app/lib/gameConfig';
 
 // POST /api/game/[gameId]/next - Start next round
 export async function POST(
