@@ -14,10 +14,11 @@ export function generateTargetAngle(): number {
 }
 
 // Scoring thresholds based on ZONE_SIZE
+// Each slice is ZONE_SIZE degrees wide (bullseye is ZONE_SIZE/2 on each side of center)
 export const SCORE_THRESHOLDS = {
-    BULLSEYE: ZONE_SIZE,        // 4 points - center zone
-    INNER: ZONE_SIZE * 2,       // 3 points - inner zones
-    OUTER: ZONE_SIZE * 3,       // 2 points - outer zones
+    BULLSEYE: ZONE_SIZE / 2,      // 4 points - center zone
+    INNER: ZONE_SIZE * 1.5,       // 3 points - inner zones
+    OUTER: ZONE_SIZE * 2.5,       // 2 points - outer zones
 };
 
 export function calculateScore(needleAngle: number, targetAngle: number): number {
@@ -35,9 +36,9 @@ function angleToPercent(degrees: number): number {
 }
 
 export function getZoneClipPaths(zoneSize: number = ZONE_SIZE) {
-    const z1 = angleToPercent(zoneSize);      // bullseye boundary
-    const z2 = angleToPercent(zoneSize * 2);  // inner boundary
-    const z3 = angleToPercent(zoneSize * 3);  // outer boundary
+    const z1 = angleToPercent(zoneSize * 0.5);  // bullseye boundary
+    const z2 = angleToPercent(zoneSize * 1.5);  // inner boundary
+    const z3 = angleToPercent(zoneSize * 2.5);  // outer boundary
     return {
         zone4: `polygon(50% 100%, ${50 - z1}% 0%, ${50 + z1}% 0%)`,
         zone3Left: `polygon(50% 100%, ${50 - z2}% 0%, ${50 - z1}% 0%)`,
