@@ -1,0 +1,298 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f0f0f0;
+  color: #222;
+  margin: 0;
+  padding: 15px;
+}
+
+.container {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.divider {
+  margin: 15px 0;
+  color: #666;
+}
+
+.error {
+  color: #c00;
+  min-height: 20px;
+}
+
+.game-code-display {
+  margin-top: 20px;
+  padding: 15px;
+  background: #ddd;
+}
+
+.game-code-display strong {
+  display: block;
+  font-size: 24px;
+  letter-spacing: 4px;
+  margin: 10px 0;
+  font-family: monospace;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.player-info {
+  text-align: center;
+}
+
+.player-name.your-turn {
+  color: #080;
+  font-weight: bold;
+}
+
+.score {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.scale-display {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* The dial - semicircle only */
+.dial-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%;
+  touch-action: none;
+  margin-bottom: 15px;
+}
+
+.dial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #888;
+  overflow: hidden;
+  clip-path: inset(0 0 50% 0);
+}
+
+.target-zone {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  top: 0;
+  left: 0;
+  transform-origin: 50% 100%;
+}
+
+.target-zone.hidden {
+  visibility: hidden;
+}
+
+.zone {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.zone-4 {
+  background: #e55;
+}
+
+.zone-3-left {
+  background: #eb3;
+}
+
+.zone-3-right {
+  background: #eb3;
+}
+
+.zone-2-left {
+  background: #3be;
+}
+
+.zone-2-right {
+  background: #3be;
+}
+
+.needle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 95%;
+  background: #c00;
+  transform-origin: bottom center;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.needle.hidden {
+  visibility: hidden;
+}
+
+.dial-center {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background: #c00;
+  border-radius: 50%;
+  z-index: 11;
+}
+
+.hint-display {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #ddd;
+}
+
+.hint-text {
+  color: #080;
+  font-weight: bold;
+}
+
+.panel {
+  padding: 15px;
+  background: #ddd;
+  margin-top: 10px;
+}
+
+.panel h3 {
+  margin: 0 0 10px;
+  color: #080;
+}
+
+.panel p {
+  margin: 0 0 10px;
+  color: #555;
+}
+
+.input-group {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.input-group input {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.result-points {
+  font-size: 24px;
+  font-weight: bold;
+  color: #080;
+}
+
+/* Chat */
+.chat-toggle {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  font-size: 14px;
+}
+
+.chat-modal {
+  position: fixed;
+  bottom: 65px;
+  right: 15px;
+  width: 260px;
+  background: #e8e8e8;
+  border: 1px solid #aaa;
+}
+
+.chat-modal.hidden {
+  display: none;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #aaa;
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #222;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.chat-messages {
+  height: 150px;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.chat-message {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.chat-message .sender {
+  color: #080;
+  font-weight: bold;
+}
+
+.chat-input-container {
+  display: flex;
+  padding: 8px;
+  border-top: 1px solid #aaa;
+  gap: 5px;
+}
+
+.chat-input-container input {
+  flex: 1;
+  margin: 0;
+}

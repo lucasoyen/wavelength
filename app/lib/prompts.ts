@@ -1,0 +1,61 @@
+export interface Prompt {
+    left: string;
+    right: string;
+}
+
+export const PROMPTS: Prompt[] = [
+    { left: "Hot", right: "Cold" },
+    { left: "Hard", right: "Soft" },
+    { left: "Rough", right: "Smooth" },
+    { left: "Sad Song", right: "Happy Song" },
+    { left: "Taste", right: "Nutrition" },
+    { left: "Sport", right: "Game" },
+    { left: "Optional", right: "Mandatory" },
+    { left: "Forbidden", right: "Encouraged" },
+    { left: "Book", right: "Movie" },
+    { left: "Ugly Animal", right: "Cute Animal" },
+    { left: "Useless Body Part", right: "Useful Body Part" },
+    { left: "Cheap", right: "Expensive" },
+    { left: "Light", right: "Heavy" },
+    { left: "Funny Topic", right: "Serious Topic" },
+    { left: "Rare", right: "Common" },
+    { left: "Uncool", right: "Cool" },
+    { left: "Nature", right: "Nurture" },
+    { left: "Democracy", right: "Dictatorship" },
+    { left: "Good Grip", right: "Bad Grip" },
+    { left: "Divisive", right: "Unifying" },
+    { left: "Temporary", right: "Permanent" },
+    { left: "Guilty Pleasure", right: "Proudly Love" },
+    { left: "Talent", right: "Skill" },
+    { left: "Worst Chore", right: "Best Chore" },
+    { left: "Inefficient", right: "Efficient" },
+    { left: "Job", right: "Career" },
+    { left: "Trash", right: "Treasure" },
+    { left: "Fantasy", right: "Sci-Fi" },
+    { left: "Bad Pizza Topping", right: "Good Pizza Topping" },
+    { left: "Dystopia", right: "Utopia" },
+    { left: "Introvert", right: "Extrovert" },
+    { left: "Threatening", right: "Inviting" },
+    { left: "Known", right: "Unknown" },
+    { left: "Modern", right: "Old Fashioned" },
+    { left: "Virtue", right: "Vice" },
+    { left: "Sandwich", right: "Not a Sandwich" },
+    { left: "Good", right: "Evil" },
+    { left: "Overrated", right: "Underrated" },
+    { left: "Spicy", right: "Mild" },
+    { left: "Wet", right: "Dry" },
+    { left: "Loud", right: "Quiet" },
+    { left: "Round", right: "Pointy" },
+    { left: "Comedy", right: "Drama" },
+    { left: "Art", right: "Commerce" },
+    { left: "Dangerous", right: "Safe" },
+    { left: "Famous", right: "Infamous" },
+    { left: "Work", right: "Play" },
+    { left: "Messy", right: "Clean" },
+    { left: "Traditional", right: "Radical" },
+    { left: "For Kids", right: "For Adults" },
+];
+
+export function getRandomPrompt(): Prompt {
+    return PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+}
