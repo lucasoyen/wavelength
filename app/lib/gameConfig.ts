@@ -19,6 +19,7 @@ export const SCORE_THRESHOLDS = {
     BULLSEYE: ZONE_SIZE / 2,      // 4 points - center zone
     INNER: ZONE_SIZE * 1.5,       // 3 points - inner zones
     OUTER: ZONE_SIZE * 2.5,       // 2 points - outer zones
+    FAR: ZONE_SIZE * 3.5,         // 1 point - far outer zones
 };
 
 export function calculateScore(needleAngle: number, targetAngle: number): number {
@@ -26,6 +27,7 @@ export function calculateScore(needleAngle: number, targetAngle: number): number
     if (diff <= SCORE_THRESHOLDS.BULLSEYE) return 4;
     if (diff <= SCORE_THRESHOLDS.INNER) return 3;
     if (diff <= SCORE_THRESHOLDS.OUTER) return 2;
+    if (diff <= SCORE_THRESHOLDS.FAR) return 1;
     return 0;
 }
 
@@ -39,11 +41,14 @@ export function getZoneClipPaths(zoneSize: number = ZONE_SIZE) {
     const z1 = angleToPercent(zoneSize * 0.5);  // bullseye boundary
     const z2 = angleToPercent(zoneSize * 1.5);  // inner boundary
     const z3 = angleToPercent(zoneSize * 2.5);  // outer boundary
+    const z4 = angleToPercent(zoneSize * 3.5);  // far outer boundary
     return {
         zone4: `polygon(50% 100%, ${50 - z1}% 0%, ${50 + z1}% 0%)`,
         zone3Left: `polygon(50% 100%, ${50 - z2}% 0%, ${50 - z1}% 0%)`,
         zone3Right: `polygon(50% 100%, ${50 + z1}% 0%, ${50 + z2}% 0%)`,
         zone2Left: `polygon(50% 100%, ${50 - z3}% 0%, ${50 - z2}% 0%)`,
         zone2Right: `polygon(50% 100%, ${50 + z2}% 0%, ${50 + z3}% 0%)`,
+        zone1Left: `polygon(50% 100%, ${50 - z4}% 0%, ${50 - z3}% 0%)`,
+        zone1Right: `polygon(50% 100%, ${50 + z3}% 0%, ${50 + z4}% 0%)`,
     };
 }

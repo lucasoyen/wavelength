@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clear-redis": "npx ts-node scripts/clear-redis.ts"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",

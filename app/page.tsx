@@ -45,9 +45,9 @@ export default function Home() {
   const [hint, setHint] = useState('');
 
   // Chat
-  const [chatOpen, setChatOpen] = useState(false);
   const [chatMessage, setChatMessage] = useState('');
   const chatMessagesRef = useRef<HTMLDivElement>(null);
+  const prevChatLengthRef = useRef(0);
 
   // Dial ref
   const dialContainerRef = useRef<HTMLDivElement>(null);
@@ -83,12 +83,14 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [gameCode, phase]);
 
-  // Scroll chat to bottom
+  // Scroll chat to bottom only when new messages arrive
   useEffect(() => {
-    if (chatMessagesRef.current) {
+    const currentLength = gameState?.chat?.length || 0;
+    if (chatMessagesRef.current && currentLength > prevChatLengthRef.current) {
       chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
     }
-  }, [gameState?.chat]);
+    prevChatLengthRef.current = currentLength;
+  }, [gameState?.chat?.length]);
 
   const createGame = async () => {
     if (!playerName.trim()) {
@@ -271,8 +273,8 @@ export default function Home() {
     if (phase === 'revealed' && gameState?.needleAngle !== null && gameState?.needleAngle !== undefined) {
       const points = calculateScore(gameState.needleAngle, gameState.targetAngle);
       if (points > 0) {
-        // More extreme particle counts: 2pts=30, 3pts=80, 4pts=200
-        const particleCounts: Record<number, number> = { 2: 30, 3: 80, 4: 200 };
+        // More extreme particle counts: 1pt=15, 2pts=30, 3pts=80, 4pts=200
+        const particleCounts: Record<number, number> = { 1: 15, 2: 30, 3: 80, 4: 200 };
 
         confetti({
           particleCount: particleCounts[points] || 30,
@@ -376,7 +378,7 @@ export default function Home() {
               </span>
               <span className="score">{gameState.scores[playerId] || 0}</span>
             </div>
-            <div>Round {gameState.round}</div>
+            <div className="round-display">Round {gameState.round}</div>
             <div className="player-info">
               <span className={`player-name ${!isMyTurn && phase !== 'revealed' ? 'your-turn' : ''}`}>
                 {opponent?.name || 'Opponent'}
@@ -409,11 +411,13 @@ export default function Home() {
                 className={`target-zone ${showTarget ? '' : 'hidden'}`}
                 style={{ transform: `rotate(${gameState.targetAngle}deg)` }}
               >
+                <div className="zone zone-1-left" style={{ clipPath: zoneClipPaths.zone1Left }}></div>
                 <div className="zone zone-2-left" style={{ clipPath: zoneClipPaths.zone2Left }}></div>
                 <div className="zone zone-3-left" style={{ clipPath: zoneClipPaths.zone3Left }}></div>
                 <div className="zone zone-4" style={{ clipPath: zoneClipPaths.zone4 }}></div>
                 <div className="zone zone-3-right" style={{ clipPath: zoneClipPaths.zone3Right }}></div>
                 <div className="zone zone-2-right" style={{ clipPath: zoneClipPaths.zone2Right }}></div>
+                <div className="zone zone-1-right" style={{ clipPath: zoneClipPaths.zone1Right }}></div>
               </div>
             </div>
             <div
@@ -500,7 +504,8 @@ export default function Home() {
               <h3 className="result-title">
                 {points === 4 ? 'Bullseye!' :
                   points === 3 ? 'Great guess!' :
-                    points === 2 ? 'Not bad!' : 'Missed!'}
+                    points === 2 ? 'Not bad!' :
+                      points === 1 ? 'Close enough!' : 'Missed!'}
               </h3>
               <p className="result-points">+{points} points</p>
               <button onClick={nextRound}>Next Round</button>
@@ -509,26 +514,15 @@ export default function Home() {
         </div>
       )}
 
-      {/* Chat Toggle */}
+      {/* Chat Section - Always visible at bottom */}
       {phase !== 'join' && (
-        <button className="chat-toggle" onClick={() => setChatOpen(!chatOpen)}>
-          Chat
-        </button>
-      )}
-
-      {/* Chat Modal */}
-      {phase !== 'join' && (
-        <div className={`chat-modal ${chatOpen ? '' : 'hidden'}`}>
-          <div className="modal-header">
-            <h3>Chat</h3>
-            <button className="close-btn" onClick={() => setChatOpen(false)}>×</button>
+        <div className="chat-section">
+          <div className="chat-header">
+            <h4>Chat</h4>
           </div>
           <div className="chat-messages" ref={chatMessagesRef}>
             {gameState?.chat.map((msg, i) => (
-              <div key={i} className="chat-message">
-                <span className="sender" style={{ color: msg.sender === me?.name ? '#080' : '#0070f3' }}>
-                  {msg.sender}:
-                </span>
+              <div key={i} className={`chat-message ${msg.sender === me?.name ? 'self' : 'opponent'}`}>
                 {msg.message}
               </div>
             ))}
