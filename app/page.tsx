@@ -691,7 +691,10 @@ export default function Home() {
               onChange={(e) => setChatMessage(e.target.value)}
               placeholder="Type a message..."
               onKeyPress={(e) => e.key === 'Enter' && sendChat()}
-              onFocus={() => setChatFocused(true)}
+              onFocus={() => {
+                setChatFocused(true);
+                window.scrollTo(0, 0);
+              }}
               onBlur={() => setChatFocused(false)}
             />
             <button onClick={() => sendChat()}>Send</button>

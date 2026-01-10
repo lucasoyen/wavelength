@@ -341,7 +341,7 @@ button:active {
 }
 
 .chat-section.focused {
-  max-height: 50vh;
+  max-height: 40vh;
 }
 
 .chat-section.expanded {
