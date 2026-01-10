@@ -61,6 +61,10 @@ export default function Home() {
   const [gifTab, setGifTab] = useState<'gifs' | 'stickers'>('gifs');
   const gifGridRef = useRef<HTMLDivElement>(null);
 
+  // Photo upload
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
   // Dial ref
   const dialContainerRef = useRef<HTMLDivElement>(null);
 
@@ -254,6 +258,37 @@ export default function Home() {
     setGifPickerOpen(false);
     setGifSearchInput('');
     setGifSearch('');
+  };
+
+  const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        sendChat(data.url);
+      } else {
+        alert(data.error || 'Failed to upload image');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Failed to upload image');
+    }
+    setUploading(false);
+    // Reset input so same file can be selected again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   // Needle drag handlers - improved tracking
@@ -562,13 +597,14 @@ export default function Home() {
           </div>
           <div className="chat-messages" ref={chatMessagesRef}>
             {gameState?.chat.map((msg, i) => {
-              const isGif = msg.message.match(/^https?:\/\/.*\.(gif|webp)/i) ||
+              const isImage = msg.message.match(/^https?:\/\/.*\.(gif|webp|png|jpg|jpeg)/i) ||
                 msg.message.includes('tenor.com') ||
-                msg.message.includes('giphy.com');
+                msg.message.includes('giphy.com') ||
+                msg.message.includes('blob.vercel-storage.com');
               return (
-                <div key={i} className={`chat-message ${msg.sender === me?.name ? 'self' : 'opponent'} ${isGif ? 'gif-message' : ''}`}>
-                  {isGif ? (
-                    <img src={msg.message} alt="GIF" className="chat-gif" />
+                <div key={i} className={`chat-message ${msg.sender === me?.name ? 'self' : 'opponent'} ${isImage ? 'gif-message' : ''}`}>
+                  {isImage ? (
+                    <img src={msg.message} alt="" className="chat-gif" />
                   ) : (
                     msg.message
                   )}
@@ -623,6 +659,21 @@ export default function Home() {
 
           <div className="chat-input-container">
             <button onClick={() => setGifPickerOpen(true)} className="gif-btn" title="Send GIF">GIF</button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="photo-btn"
+              title="Send Photo"
+              disabled={uploading}
+            >
+              {uploading ? '...' : 'Pic'}
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoSelect}
+              style={{ display: 'none' }}
+            />
             <input
               type="text"
               value={chatMessage}
