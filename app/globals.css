@@ -358,6 +358,12 @@ button:active {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.chat-messages::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-message {
