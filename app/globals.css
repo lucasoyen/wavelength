@@ -340,6 +340,10 @@ button:active {
   overflow: hidden;
 }
 
+.chat-section.focused {
+  max-height: none;
+}
+
 .chat-section.expanded {
   max-height: none;
   margin-top: 0;

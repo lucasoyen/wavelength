@@ -65,8 +65,9 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
-  // Chat maximize state
+  // Chat state
   const [chatMaximized, setChatMaximized] = useState(false);
+  const [chatFocused, setChatFocused] = useState(false);
 
   // Dial ref
   const dialContainerRef = useRef<HTMLDivElement>(null);
@@ -448,7 +449,7 @@ export default function Home() {
 
       {/* Game Screen */}
       {(phase === 'boss-input' || phase === 'guessing' || phase === 'revealed') && gameState && (
-        <div className={`screen active game-screen ${chatMaximized ? 'chat-focused' : ''}`}>
+        <div className={`screen active game-screen ${chatMaximized || chatFocused ? 'chat-focused' : ''}`}>
           <div className="game-header">
             <div className="player-info">
               <span className={`player-name ${isMyTurn ? 'your-turn' : ''}`}>
@@ -594,7 +595,7 @@ export default function Home() {
 
       {/* Chat Section - Always visible at bottom */}
       {phase !== 'join' && (
-        <div className={`chat-section ${chatMaximized ? 'expanded' : ''}`}>
+        <div className={`chat-section ${chatMaximized ? 'expanded' : ''} ${chatFocused ? 'focused' : ''}`}>
           <div className="chat-header">
             <h4>Chat</h4>
             <button
@@ -602,7 +603,7 @@ export default function Home() {
               onClick={() => setChatMaximized(!chatMaximized)}
               title={chatMaximized ? 'Minimize' : 'Maximize'}
             >
-              {chatMaximized ? '↘↖' : '↗↙'}
+              {chatMaximized ? '↗↙' : '↙↗'}
             </button>
           </div>
           <div className="chat-messages" ref={chatMessagesRef}>
@@ -690,6 +691,8 @@ export default function Home() {
               onChange={(e) => setChatMessage(e.target.value)}
               placeholder="Type a message..."
               onKeyPress={(e) => e.key === 'Enter' && sendChat()}
+              onFocus={() => setChatFocused(true)}
+              onBlur={() => setChatFocused(false)}
             />
             <button onClick={() => sendChat()}>Send</button>
           </div>
