@@ -14,8 +14,8 @@ html, body {
 
 body {
   font-family: system-ui, sans-serif;
-  background: #f0f0f0;
-  color: #222;
+  background: #1a1a1a;
+  color: #e0e0e0;
   margin: 0;
   padding: 10px;
   padding-top: max(10px, env(safe-area-inset-top));
@@ -64,6 +64,7 @@ body {
 h1 {
   margin-bottom: 15px;
   font-size: 24px;
+  color: #fff;
 }
 
 input[type="text"] {
@@ -72,6 +73,14 @@ input[type="text"] {
   padding: 8px;
   margin-bottom: 10px;
   font-size: 16px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #e0e0e0;
+  border-radius: 4px;
+}
+
+input[type="text"]::placeholder {
+  color: #888;
 }
 
 button {
@@ -79,22 +88,31 @@ button {
   font-size: 14px;
   cursor: pointer;
   margin: 3px;
+  background: #3a3a3a;
+  border: 1px solid #555;
+  color: #e0e0e0;
+  border-radius: 4px;
+}
+
+button:active {
+  background: #4a4a4a;
 }
 
 .divider {
   margin: 15px 0;
-  color: #666;
+  color: #888;
 }
 
 .error {
-  color: #c00;
+  color: #f66;
   min-height: 20px;
 }
 
 .game-code-display {
   margin-top: 20px;
   padding: 15px;
-  background: #ddd;
+  background: #2a2a2a;
+  border-radius: 4px;
 }
 
 .game-code-display strong {
@@ -103,6 +121,7 @@ button {
   letter-spacing: 4px;
   margin: 10px 0;
   font-family: monospace;
+  color: #fff;
 }
 
 .game-header {
@@ -123,21 +142,23 @@ button {
 
 .player-name {
   font-size: 14px;
+  color: #bbb;
 }
 
 .player-name.your-turn {
-  color: #080;
+  color: #5c5;
   font-weight: bold;
 }
 
 .score {
   font-size: 18px;
   font-weight: bold;
+  color: #fff;
 }
 
 .round-display {
   font-size: 13px;
-  color: #555;
+  color: #888;
 }
 
 .scale-display {
@@ -147,6 +168,7 @@ button {
   font-weight: bold;
   font-size: 13px;
   padding: 0 5px;
+  color: #ccc;
 }
 
 /* The dial - semicircle only */
@@ -166,8 +188,8 @@ button {
   width: 100%;
   height: 200%;
   border-radius: 50%;
-  background: #fff;
-  border: 2px solid #888;
+  background: #2a2a2a;
+  border: 2px solid #555;
   overflow: hidden;
   clip-path: inset(0 0 50% 0);
 }
@@ -225,7 +247,7 @@ button {
   left: 50%;
   width: 4px;
   height: 95%;
-  background: #c00;
+  background: #f44;
   transform-origin: bottom center;
   transform: translateX(-50%);
   z-index: 10;
@@ -242,7 +264,7 @@ button {
   transform: translateX(-50%);
   width: 20px;
   height: 20px;
-  background: #c00;
+  background: #f44;
   border-radius: 50%;
   z-index: 11;
 }
@@ -250,30 +272,32 @@ button {
 .hint-display {
   margin-bottom: 8px;
   padding: 8px;
-  background: #ddd;
+  background: #2a2a2a;
   font-size: 14px;
+  border-radius: 4px;
 }
 
 .hint-text {
-  color: #080;
+  color: #5c5;
   font-weight: bold;
 }
 
 .panel {
   padding: 10px;
-  background: #ddd;
+  background: #2a2a2a;
   margin-top: 6px;
+  border-radius: 4px;
 }
 
 .panel h3 {
   margin: 0 0 6px;
-  color: #080;
+  color: #5c5;
   font-size: 16px;
 }
 
 .panel p {
   margin: 0 0 6px;
-  color: #555;
+  color: #aaa;
   font-size: 13px;
 }
 
@@ -292,7 +316,7 @@ button {
 .result-points {
   font-size: 24px;
   font-weight: bold;
-  color: #080;
+  color: #5c5;
 }
 
 /* Chat - always visible at bottom */
@@ -301,14 +325,14 @@ button {
 }
 
 .chat-section {
-  background: #e8e8e8;
-  border: 1px solid #aaa;
+  background: #252525;
+  border: 1px solid #444;
   border-radius: 4px;
-  margin-top: auto;
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
-  min-height: 120px;
-  max-height: 140px;
+  flex: 1;
+  min-height: 0;
 }
 
 .chat-header {
@@ -316,13 +340,14 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 6px 8px;
-  border-bottom: 1px solid #aaa;
-  background: #ddd;
+  border-bottom: 1px solid #444;
+  background: #2a2a2a;
 }
 
 .chat-header h4 {
   margin: 0;
   font-size: 13px;
+  color: #ccc;
 }
 
 .chat-messages {
@@ -353,15 +378,15 @@ button {
 
 .chat-message.opponent {
   align-self: flex-start;
-  background: #e5e5ea;
-  color: #000;
+  background: #444;
+  color: #e0e0e0;
   border-bottom-left-radius: 4px;
 }
 
 .chat-input-container {
   display: flex;
   padding: 6px 8px;
-  border-top: 1px solid #aaa;
+  border-top: 1px solid #444;
   gap: 5px;
 }
 
