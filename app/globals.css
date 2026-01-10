@@ -45,14 +45,14 @@ body {
   min-height: 0;
 }
 
-.game-screen {
+.screen.active.game-screen {
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.game-screen.chat-focused {
+.screen.game-screen.chat-focused {
   display: none;
 }
 
