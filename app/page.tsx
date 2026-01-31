@@ -2,16 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import confetti from 'canvas-confetti';
-import { GiphyFetch } from '@giphy/js-fetch-api';
-import { Grid } from '@giphy/react-components';
 import { calculateScore, getZoneClipPaths, ZONE_SIZE } from './lib/gameConfig';
 import { getRandomPrompt } from './lib/prompts';
 
 // Get clip paths for zone rendering
 const zoneClipPaths = getZoneClipPaths(ZONE_SIZE);
-
-// Initialize GIPHY - key needs to be public for SDK
-const gf = new GiphyFetch(process.env.NEXT_PUBLIC_GIPHY_API_KEY || '');
 
 type GamePhase = 'join' | 'waiting' | 'boss-input' | 'guessing' | 'revealed';
 
@@ -53,13 +48,6 @@ export default function Home() {
   const [chatMessage, setChatMessage] = useState('');
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const prevChatLengthRef = useRef(0);
-
-  // GIF picker
-  const [gifPickerOpen, setGifPickerOpen] = useState(false);
-  const [gifSearchInput, setGifSearchInput] = useState('');
-  const [gifSearch, setGifSearch] = useState('');
-  const [gifTab, setGifTab] = useState<'gifs' | 'stickers'>('gifs');
-  const gifGridRef = useRef<HTMLDivElement>(null);
 
   // Photo upload
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -235,33 +223,6 @@ export default function Home() {
     } catch (e) {
       console.error('Failed to send chat:', e);
     }
-  };
-
-  // GIF functions
-  const fetchGifs = useCallback((offset: number) => {
-    if (gifSearch) {
-      return gifTab === 'stickers'
-        ? gf.search(gifSearch, { offset, limit: 10, type: 'stickers' })
-        : gf.search(gifSearch, { offset, limit: 10 });
-    }
-    return gifTab === 'stickers'
-      ? gf.trending({ offset, limit: 10, type: 'stickers' })
-      : gf.trending({ offset, limit: 10 });
-  }, [gifSearch, gifTab]);
-
-  const handleGifTabChange = (tab: 'gifs' | 'stickers') => {
-    setGifTab(tab);
-  };
-
-  const submitGifSearch = () => {
-    setGifSearch(gifSearchInput);
-  };
-
-  const sendGif = (gifUrl: string) => {
-    sendChat(gifUrl);
-    setGifPickerOpen(false);
-    setGifSearchInput('');
-    setGifSearch('');
   };
 
   const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -608,14 +569,12 @@ export default function Home() {
           </div>
           <div className="chat-messages" ref={chatMessagesRef}>
             {gameState?.chat.map((msg, i) => {
-              const isImage = msg.message.match(/^https?:\/\/.*\.(gif|webp|png|jpg|jpeg)/i) ||
-                msg.message.includes('tenor.com') ||
-                msg.message.includes('giphy.com') ||
+              const isImage = msg.message.match(/^https?:\/\/.*\.(webp|png|jpg|jpeg)/i) ||
                 msg.message.includes('blob.vercel-storage.com');
               return (
-                <div key={i} className={`chat-message ${msg.sender === me?.name ? 'self' : 'opponent'} ${isImage ? 'gif-message' : ''}`}>
+                <div key={i} className={`chat-message ${msg.sender === me?.name ? 'self' : 'opponent'} ${isImage ? 'image-message' : ''}`}>
                   {isImage ? (
-                    <img src={msg.message} alt="" className="chat-gif" />
+                    <img src={msg.message} alt="" className="chat-image" />
                   ) : (
                     msg.message
                   )}
@@ -624,52 +583,7 @@ export default function Home() {
             })}
           </div>
 
-          {/* GIF Picker */}
-          {gifPickerOpen && (
-            <div className="gif-picker">
-              <div className="gif-picker-tabs">
-                <button
-                  className={`gif-tab ${gifTab === 'gifs' ? 'active' : ''}`}
-                  onClick={() => handleGifTabChange('gifs')}
-                >
-                  GIFs
-                </button>
-                <button
-                  className={`gif-tab ${gifTab === 'stickers' ? 'active' : ''}`}
-                  onClick={() => handleGifTabChange('stickers')}
-                >
-                  Stickers
-                </button>
-                <button onClick={() => setGifPickerOpen(false)} className="gif-close-btn">×</button>
-              </div>
-              <div className="gif-picker-header">
-                <input
-                  type="text"
-                  value={gifSearchInput}
-                  onChange={(e) => setGifSearchInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && submitGifSearch()}
-                  placeholder={`Search ${gifTab}...`}
-                />
-                <button onClick={submitGifSearch} className="gif-search-btn">Go</button>
-              </div>
-              <div className="gif-grid" ref={gifGridRef}>
-                <Grid
-                  key={`${gifTab}-${gifSearch}`}
-                  width={gifGridRef.current?.offsetWidth || 300}
-                  columns={3}
-                  fetchGifs={fetchGifs}
-                  onGifClick={(gif, e) => {
-                    e.preventDefault();
-                    sendGif(gif.images.fixed_height.url);
-                  }}
-                  noLink={true}
-                />
-              </div>
-            </div>
-          )}
-
           <div className="chat-input-container">
-            <button onClick={() => setGifPickerOpen(true)} className="gif-btn" title="Send GIF">GIF</button>
             <button
               onClick={() => fileInputRef.current?.click()}
               className="photo-btn"

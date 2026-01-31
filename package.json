@@ -10,8 +10,6 @@
     "clear-redis": "npx ts-node scripts/clear-redis.ts"
   },
   "dependencies": {
-    "@giphy/js-fetch-api": "^5.7.0",
-    "@giphy/react-components": "^10.1.1",
     "@vercel/blob": "^2.0.0",
     "canvas-confetti": "^1.9.4",
     "ioredis": "^5.9.1",
